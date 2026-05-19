@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-white flex items-center justify-center min-h-screen">
+    <div class="bg-slate-900 p-8 rounded-3xl border border-slate-700 w-96 text-center shadow-2xl">
+        <h1 class="text-2xl font-bold mb-4 text-emerald-400">PlantPulse AI</h1>
+        <input type="file" id="file" class="mb-4 w-full text-sm text-slate-400">
+        <img id="preview" class="hidden mb-4 rounded-xl border border-slate-700 w-full h-40 object-cover">
+        <button onclick="analyze()" class="w-full bg-emerald-600 py-3 rounded-xl font-bold hover:bg-emerald-500">Analyze & Cure</button>
+        <div id="res" class="mt-4 hidden p-4 bg-black rounded-xl border border-emerald-900 text-left">
+            <h2 id="name" class="text-lg font-bold text-emerald-400"></h2>
+            <p id="conf" class="text-xs text-slate-400"></p>
+            <p id="remedy" class="text-sm mt-2 pt-2 border-t border-slate-700"></p>
+        </div>
+    </div>
+    <script>
+        document.getElementById('file').onchange = (e) => {
+            const reader = new FileReader();
+            reader.onload = () => { document.getElementById('preview').src = reader.result; document.getElementById('preview').classList.remove('hidden'); }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+        async function analyze() {
+            let formData = new FormData();
+            formData.append('file', document.getElementById('file').files[0]);
+            let res = await fetch('/predict', {method: 'POST', body: formData});
+            let data = await res.json();
+            document.getElementById('res').classList.remove('hidden');
+            document.getElementById('name').innerText = "Disease: " + data.disease;
+            document.getElementById('conf').innerText = "Confidence: " + data.confidence;
+            document.getElementById('remedy').innerText = "Advice: " + data.remedy;
+        }
+    </script>
+</body>
+</html>
