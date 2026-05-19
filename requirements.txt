@@ -1,6 +1,6 @@
 fastapi
 uvicorn
 transformers
-torch
 pillow
-python-multipar
+python-multipart
+torch --index-url https://download.pytorch.org/whl/cpu
