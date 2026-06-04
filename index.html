@@ -1,49 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Plant Pulse AI</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background-color: #0f172a; color: white; padding-top: 50px; }
-        .container { background: #1e293b; padding: 30px; border-radius: 15px; display: inline-block; }
-        button { background-color: #10b981; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; margin-top: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; width: 350px; }
+        h1 { margin-bottom: 20px; color: #10b981; }
+        input { margin: 15px 0; color: white; }
+        button { background: #10b981; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        button:hover { background: #059669; }
+        #result { margin-top: 20px; font-size: 1.2em; font-weight: bold; color: #f8fafc; }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="card">
         <h1>Plant Pulse AI</h1>
         <input type="file" id="fileInput">
-        <br>
         <button onclick="uploadImage()">Analyze & Cure</button>
-        
-        <div id="resultArea" style="margin-top: 20px;">
-            <h2 id="result">Disease: Waiting...</h2>
-        </div>
+        <div id="result">Disease: Waiting...</div>
     </div>
 
     <script>
         async function uploadImage() {
-            const fileInput = document.getElementById('fileInput');
-            if (fileInput.files.length === 0) {
-                alert("Please select an image first!");
-                return;
-            }
-            
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return alert("Select an image first!");
             document.getElementById('result').innerText = "Analyzing...";
-
             const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
-
-            try {
-                const response = await fetch('/predict', {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await response.json();
-                document.getElementById('result').innerText = "Disease: " + data.prediction;
-            } catch (error) {
-                document.getElementById('result').innerText = "Error: Could not connect to server.";
-            }
+            formData.append('file', file);
+            const response = await fetch('/predict', { method: 'POST', body: formData });
+            const data = await response.json();
+            document.getElementById('result').innerText = "Disease: " + data.prediction;
         }
     </script>
 </body>
