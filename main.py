@@ -7,7 +7,7 @@ import io
 
 app = FastAPI()
 
-# Pre-trained model direct download ho jayega
+# Ye pre-trained model hai jo apne aap download ho jayega
 model = tf.keras.applications.MobileNetV2(weights='imagenet')
 
 @app.get("/", response_class=HTMLResponse)
@@ -22,6 +22,6 @@ async def predict(file: UploadFile = File(...)):
     img_array = np.array(image) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
     
-    # Prediction
+    # Model prediction
     predictions = model.predict(img_array)
-    return {"message": "Model is working perfectly!", "status": "Ready to detect!"}
+    return {"message": "Success", "status": "System is live and running!"}
