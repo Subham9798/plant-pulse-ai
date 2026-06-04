@@ -7,21 +7,25 @@ import io
 
 app = FastAPI()
 
-# Ye pre-trained model hai jo apne aap download ho jayega
+# Model loading ko simple rakha hai
 model = tf.keras.applications.MobileNetV2(weights='imagenet')
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 async def read_root():
     with open("index.html", "r") as f:
-        return f.read()
+        return HTMLResponse(content=f.read())
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    image = Image.open(io.BytesIO(await file.read())).convert('RGB')
+    # Image read
+    contents = await file.read()
+    image = Image.open(io.BytesIO(contents)).convert('RGB')
     image = image.resize((224, 224))
+    
+    # Preprocessing
     img_array = np.array(image) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
     
-    # Model prediction
-    predictions = model.predict(img_array)
-    return {"message": "Success", "status": "System is live and running!"}
+    # Prediction (Simple output)
+    preds = model.predict(img_array)
+    return {"status": "success", "prediction": "Processed"}
