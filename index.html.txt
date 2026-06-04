@@ -1,7 +1,0 @@
-<!DOCTYPE html>
-<html>
-<body>
-    <h1>Plant Pulse AI - Live</h1>
-    <p>Agar ye dikh raha hai, toh tumhara frontend sahi set ho gaya hai!</p>
-</body>
-</html>
