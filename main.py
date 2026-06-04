@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Frontend connection ke liye
+# Frontend connection
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -12,11 +12,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Yahan main change hai: "/" par ab JSON nahi, HTML file dikhegi
 @app.get("/")
 async def read_index():
     return FileResponse("index.html")
 
-# Yahan tumhara prediction wala code rahega (jo pehle tha)
+# AI Prediction route
 @app.post("/predict")
 async def predict():
-    return {"status": "Prediction logic here"}
+    return {"status": "Prediction logic will go here"}
