@@ -1,12 +1,10 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
-import numpy as np
-from PIL import Image
-import io
 
 app = FastAPI()
 
-# Frontend ko connect karne ke liye zaroori hai
+# Frontend connection ke liye
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,11 +13,10 @@ app.add_middleware(
 )
 
 @app.get("/")
-def home():
-    return {"message": "API is working perfectly!"}
+async def read_index():
+    return FileResponse("index.html")
 
+# Yahan tumhara prediction wala code rahega (jo pehle tha)
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)):
-    # Image process karne ka basic code
-    image = Image.open(io.BytesIO(await file.read()))
-    return {"filename": file.filename, "status": "Image received"}
+async def predict():
+    return {"status": "Prediction logic here"}
