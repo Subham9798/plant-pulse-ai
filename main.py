@@ -17,5 +17,6 @@ async def read_index():
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    # Yahan tumhara model logic aayega, abhi ke liye dummy data
-    return {"prediction": "Early Blight", "confidence": "95%"}
+    # Yahan abhi hum dummy data bhej rahe hain
+    # Jaise hi tum model lagaoge, ye data model se aayega
+    return {"prediction": "Early Blight"}
