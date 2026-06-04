@@ -1,6 +1,5 @@
 fastapi
 uvicorn
-transformers
+tensorflow-cpu
 pillow
 python-multipart
-torch==2.0.1+cpu
