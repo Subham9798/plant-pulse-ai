@@ -3,5 +3,5 @@ from fastapi import FastAPI
 app = FastAPI()
 
 @app.get("/")
-def read_root():
-    return {"message": "Server is live and working!"}
+def home():
+    return {"message": "Success! Server is running."}
