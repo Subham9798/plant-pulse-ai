@@ -1,29 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plant Pulse AI</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background-color: #0f172a; color: white; padding-top: 50px; }
+        .container { background: #1e293b; padding: 30px; border-radius: 15px; display: inline-block; }
+        button { background-color: #10b981; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; margin-top: 10px; }
+    </style>
+</head>
 <body>
-    <h1>Plant Pulse AI</h1>
-    <input type="file" id="fileInput">
-    <button onclick="uploadImage()">Analyze & Cure</button>
-    
-    <div id="resultArea">
-        <h2 id="result">Disease: undefined</h2>
+    <div class="container">
+        <h1>Plant Pulse AI</h1>
+        <input type="file" id="fileInput">
+        <br>
+        <button onclick="uploadImage()">Analyze & Cure</button>
+        
+        <div id="resultArea" style="margin-top: 20px;">
+            <h2 id="result">Disease: Waiting...</h2>
+        </div>
     </div>
 
     <script>
         async function uploadImage() {
             const fileInput = document.getElementById('fileInput');
-            if (fileInput.files.length === 0) return alert("Please select a file");
+            if (fileInput.files.length === 0) {
+                alert("Please select an image first!");
+                return;
+            }
             
+            document.getElementById('result').innerText = "Analyzing...";
+
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
 
-            const response = await fetch('/predict', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-            
-            document.getElementById('result').innerText = "Disease: " + data.prediction;
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                document.getElementById('result').innerText = "Disease: " + data.prediction;
+            } catch (error) {
+                document.getElementById('result').innerText = "Error: Could not connect to server.";
+            }
         }
     </script>
 </body>
