@@ -7,8 +7,8 @@ import io
 
 app = FastAPI()
 
-# Model load karo (Agar model.h5 file hai)
-# model = tf.keras.models.load_model('model.h5') 
+# Model load (apna path sahi rakhna)
+model = tf.keras.models.load_model('model.h5')
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
@@ -17,5 +17,12 @@ async def read_root():
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    # Yahan image process karne ka code aayega
-    return {"status": "success", "message": "Model load ho raha hai"}
+    image = Image.open(io.BytesIO(await file.read())).convert('RGB')
+    image = image.resize((224, 224)) # Model ke hisab se size
+    img_array = np.array(image) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
+    
+    prediction = model.predict(img_array)
+    class_idx = np.argmax(prediction)
+    
+    return {"label": f"Class {class_idx}", "confidence": float(np.max(prediction))}
